@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+<mapper namespace="com.camping.home.mapper.MemberMapper">
+
+	<insert id="insertMember">
+		insert into member(id, password, name, email, hp1, hp2, hp3, post, addr, addr_detail, adminYN, reg_date, authority, enabled )
+		values( #{id}, #{pass}, #{name}, #{email}, #{hp1}, #{hp2}, #{hp3}, #{post}, #{addr}, #{addr_detail},'N',sysdate, 'ROLE_USER',1 )
+	</insert>
+	
+	<select id="isCheckId" resultType="int" >
+		Select count(*) from member
+		Where id= #{id}
+	</select>
+	
+	<select id="isValidMember" resultType="com.camping.home.member.model.Member">
+		Select ID, PASSWORD, NAME, ADMINYN from member
+		Where id= #{id}
+	</select>
+	
+	
+</mapper>
+
+			
+			
+			
+			
+			
