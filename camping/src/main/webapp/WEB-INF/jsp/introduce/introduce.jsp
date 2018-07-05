@@ -5,9 +5,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
+<head>11
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>캠핑장소개</title>
+<title>캠핑장소개111</title>
 	<jsp:include page="/include/head.jsp" flush="false" />
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
