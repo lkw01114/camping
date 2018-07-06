@@ -29,22 +29,7 @@
 						</div>
 					</li>
 					<li>
-						<strong><a href="/todo/listTodo">일정조회</a></strong>
-					</li>
-					<li>
-						<strong><a href="javascript:void(0);">메뉴준비1</a></strong>
-					</li>
-					<li>
-						<strong><a href="javascript:void(0);">메뉴준비2</a></strong>
-					</li>
-					<li>
-						<strong><a href="javascript:void(0);">메뉴준비3</a></strong>
-					</li>
-					<li>
-						<strong><a href="javascript:void(0);">메뉴준비4</a></strong>
-					</li>
-					<li>
-						<strong><a href="javascript:void(0);">메뉴준비5</a></strong>
+						<strong><a href="/bbs/bbs_write">커뮤니티</a></strong>
 					</li>
 				</ul>
 			</div>
@@ -70,7 +55,7 @@ if(StrUtil.checkNull(member.getId()).equals("")){
 }else{
 %>					
 					<li><%=member.getName() %>님 안녕하세요!<li>
-					<li><a href="/LogoutServlet">로그아웃</a></li>
+					<li><a href="/member/logout">로그아웃</a></li>
 <%
 }
 %>					

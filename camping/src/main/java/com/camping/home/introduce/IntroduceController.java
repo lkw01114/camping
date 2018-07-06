@@ -1,4 +1,4 @@
-package com.camping.home.front.introduce.controller;
+package com.camping.home.introduce;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

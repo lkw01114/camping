@@ -11,11 +11,13 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.camping.home.common.CommonUtil;
 import com.camping.home.common.PasswordAuthentication;
@@ -52,9 +54,13 @@ public class MemberController {
 	public String joinMemberPost(Model model, @RequestParam Map<String,Object> params, RedirectAttributes rttr)throws Exception {
 		logger.info("joinmember Post");
 		
-		// 비밀번호 암호화
-		PasswordAuthentication passAuth = new PasswordAuthentication();
-		String token = passAuth.hash(CommonUtil.nvlTrim(params.get("strJoinPass")).toCharArray());		
+		// 기존 암화화 방식
+		// PasswordAuthentication passAuth = new PasswordAuthentication();
+		// String token = passAuth.hash(CommonUtil.nvlTrim(params.get("strJoinPass")).toCharArray());	
+		
+		// 시큐리티 비밀번호 암호화
+		BCryptPasswordEncoder securityPass = new BCryptPasswordEncoder();
+		String token = securityPass.encode(CommonUtil.nvlTrim(params.get("strJoinPass")));
 		
 		params.put("id", CommonUtil.nvlTrim(params.get("strJoinID")));
 		//params.put("pass", token);
@@ -141,13 +147,11 @@ public class MemberController {
 	 * login page
 	 * @return
 	 */
-	/*
 	@RequestMapping(value="login", method=RequestMethod.GET)
 	public String loginGet() {
 		logger.info("loginGet");
 		return URL_OF_COMMON + "login"; 
 	}
-	*/
 	
 	/**
 	 * login Proc
@@ -155,13 +159,14 @@ public class MemberController {
 	 * @param params
 	 * @return
 	 */
-	/*
 	@RequestMapping(value="login", method=RequestMethod.POST)
 	public String loginPost(Model model, HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> params)throws Exception {
 		logger.info("loginPost");
 		
-		// �н����� ��ȣȭ ó��
+		// 이전 비밀번호 암호화 
 		PasswordAuthentication passAuth = new PasswordAuthentication();
+		// 시큐리티 비밀번호 암호화
+		BCryptPasswordEncoder securityPass = new BCryptPasswordEncoder();
 		
 		String id 		= CommonUtil.nvlTrim(params.get("strLoginID"));
 		String pass   = CommonUtil.nvlTrim(params.get("strLoginPwd"));
@@ -179,7 +184,10 @@ public class MemberController {
 				return URL_OF_COMMON + "login"; 
 			}else {
 				
-				if(!passAuth.authenticate(pass.toCharArray(), returnMember.getPassword() ) ) {
+				//if(!passAuth.authenticate(pass.toCharArray(), returnMember.getPassword() ) ) {
+				//if(!securityPass.encode(pass).equals(returnMember.getPassword())) {
+				//logger.info(">>>>>> securityPass.encode(pass) " + securityPass.encode(pass));
+				if(!returnMember.getPassword().equals(pass)) {
 					model.addAttribute("error", "비밀번호가 상이합니다.");
 					return URL_OF_COMMON + "login"; 
 				}
@@ -187,14 +195,14 @@ public class MemberController {
 				HttpSession session = request.getSession();
 				session.setAttribute("member", returnMember);
 
-				// ���̵� ����
+				// 아이디 저장
 				if("".equals(strSaveID)) { 
 					Cookie cookie = new Cookie("id",id);
-					cookie.setMaxAge(0);	// 0���� ����
+					cookie.setMaxAge(0);	// 0으로 설정.
 					response.addCookie(cookie);				
-				}else { // üũ�� ���
+				}else { // 아이디 비저장
 					Cookie cookie = new Cookie("id",id);
-					cookie.setMaxAge(60*50*24*365);	// 1������ ����
+					cookie.setMaxAge(60*50*24*365);	// 1년으로 설정.
 					response.addCookie(cookie);
 				}	
 				
@@ -212,7 +220,31 @@ public class MemberController {
 		}
 		
 	}
-	*/
+	
+	/**
+	 * logout
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value="logout")
+	protected String doGet(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		HttpSession session = request.getSession();
+		Member member = (Member)session.getAttribute("member");
+		String returnUrl = "";
+		
+		if(member != null) {
+			session.invalidate();
+			returnUrl = "redirect:/"; 
+		
+		}else {
+			model.addAttribute("error", "먼저 로그인을 하세요");
+			returnUrl = URL_OF_COMMON + "login";
+		}
+		
+		return returnUrl;
+	}
 	
 	
 }

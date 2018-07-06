@@ -33,7 +33,7 @@
 				<!-- //회원가입 타이틀 -->
 
 				<div class="text_center">
-					<a href="javascript:void(0);" onclick="page_link('/login');" class="btn btn_l cancel">로그인</a> 
+					<a href="javascript:void(0);" onclick="page_link('/member/login');" class="btn btn_l cancel">로그인</a> 
 					<a href="javascript:void(0);" onclick="page_link('/');" class="btn btn_l">메인으로 이동</a> 
 				</div>
 			</div>

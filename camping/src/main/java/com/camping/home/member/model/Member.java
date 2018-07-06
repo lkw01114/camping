@@ -13,7 +13,7 @@ public class Member {
 	String post;
 	String addr;
 	String addr_detail;
-	String adminYn;
+	String admin_Yn;
 	String reg_date;
 
 	public String getId() {
@@ -104,12 +104,12 @@ public class Member {
 		this.addr_detail = addr_detail;
 	}
 
-	public String getAdminYn() {
-		return adminYn;
+	public String getAdmin_Yn() {
+		return admin_Yn;
 	}
 
-	public void setAdminYn(String adminYn) {
-		this.adminYn = adminYn;
+	public void setAdmin_Yn(String admin_Yn) {
+		this.admin_Yn = admin_Yn;
 	}
 
 	public String getReg_date() {
@@ -124,6 +124,6 @@ public class Member {
 	public String toString() {
 		return "Member [id=" + id + ", name=" + name + ", email=" + email + ", country=" + country + ", hp1=" + hp1
 				+ ", hp2=" + hp2 + ", hp3=" + hp3 + ", post=" + post + ", addr=" + addr + ", addr_detail=" + addr_detail
-				+ ", adminYn=" + adminYn + ", reg_date=" + reg_date + "]";
+				+ ", admin_Yn=" + admin_Yn + ", reg_date=" + reg_date + "]";
 	}
 }

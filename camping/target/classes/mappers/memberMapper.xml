@@ -7,7 +7,7 @@
 <mapper namespace="com.camping.home.mapper.MemberMapper">
 
 	<insert id="insertMember">
-		insert into member(id, password, name, email, hp1, hp2, hp3, post, addr, addr_detail, adminYN, reg_date, authority, enabled )
+		insert into member(id, password, name, email, hp1, hp2, hp3, post, addr, addr_detail, admin_YN, reg_date, authority, enabled )
 		values( #{id}, #{pass}, #{name}, #{email}, #{hp1}, #{hp2}, #{hp3}, #{post}, #{addr}, #{addr_detail},'N',sysdate, 'ROLE_USER',1 )
 	</insert>
 	
@@ -17,8 +17,8 @@
 	</select>
 	
 	<select id="isValidMember" resultType="com.camping.home.member.model.Member">
-		Select ID, PASSWORD, NAME, ADMINYN from member
-		Where id= #{id}
+		Select ID, PASSWORD, NAME, ADMIN_YN, authority, enabled  from member
+		Where enabled = 1 and id= #{id}
 	</select>
 	
 	
