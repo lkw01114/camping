@@ -2,6 +2,7 @@
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util"
@@ -34,6 +35,18 @@
 		<!-- 파일을 읽는 시간을 1초로 설정.  -->
 	</beans:bean>		
 	
+	<!-- Multipart -->
+	<beans:bean id="multipartResolver" 
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="100000000"></beans:property>
+	</beans:bean>	
+	
+	<!-- interceptor Init -->
+	<mvc:interceptors>
+		<beans:bean class="com.camping.home.bbs.interceptor.InitInterceptor" />
+	</mvc:interceptors>	
+	
+	<!-- bbs Interceptor -->
 	<interceptors>
 		<interceptor>
 			<mapping path="/bbs/*"/>
@@ -41,6 +54,16 @@
 		</interceptor>
 	</interceptors>	
 	
+	<!-- mvc Interceptor -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/bbs/*" />
+			<beans:bean class="com.camping.home.common.LoginCheckInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>	
+	
+	
+	 
 	<context:component-scan base-package="com.camping.home" />
 	
 	

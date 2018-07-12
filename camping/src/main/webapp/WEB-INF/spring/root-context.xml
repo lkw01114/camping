@@ -37,6 +37,9 @@
 	</bean>
 	
 	<!-- <aop:aspectj-autoproxy></aop:aspectj-autoproxy> -->
+	<bean id="uploadPath" class="java.lang.String">
+		<constructor-arg value="/resources/upload"></constructor-arg>
+	</bean>	
 		
 	<context:component-scan base-package="com.camping.home"></context:component-scan>
 		

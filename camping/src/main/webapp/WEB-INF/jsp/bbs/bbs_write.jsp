@@ -18,7 +18,86 @@
 		}
 	</style>	
 	<script type="text/javascript">
-	
+		function bbsCheck(){
+			if($("#board_category").val() == ""){
+				alert("게시판 종류를 선택하세요.");
+				$("#board_category").focus();
+				return false;
+			}
+			if($("#title").val() == ""){
+				alert("제목을 입력하세요.");
+				$("#title").focus();
+				return false;
+			}
+			if($("#content").val() == ""){
+				alert("내용을 입력하세요.");
+				$("#content").focus();
+				return false;
+			}
+			
+			if($("#board_category").val() == "2"){
+				if($('#file1').val() == ""){
+					alert("파일을 선택하세요.");
+					$("#file1").focus();
+					return false;	
+				}
+			}
+			$("#bbsInsertForm").attr("action","/bbs/bbs_writeAction").submit();
+		}
+		
+		$(document).ready(function(){
+			$("#file2").hide();
+			$("#file3").hide();
+			$("#fileVital").hide();
+		});
+
+		var fileCount = 1;
+		var fileMin = 1;
+		var fileMax = 3;
+		function fileAdd(){
+			
+			if(fileCount == 1){
+				if( $("#file2").is($("#file2").show()) ) {
+				    $("#file2").show();
+				    fileCount++;
+				}	
+			}else if(fileCount == 2){
+				if( $("#file3").is($("#file3").show()) ) {
+				    $("#file3").show();
+				    fileCount++;				    
+				}	
+			}else if(fileCount == 3){
+				alert("파일은 총 3개까지만 추가됩니다.");
+			}
+		}
+		
+		function fileDel(){
+			if(fileCount == 3){
+				$("#file3").val("");
+				$("#file3").hide();
+			    fileCount--;
+			}else if(fileCount == 2){
+				$("#file2").val("");
+				$("#file2").hide();
+			    fileCount--;
+			}else if(fileCount == 1){
+				alert("파일은 최소 1개입니다.");
+			}
+		}
+		
+		
+		
+		$(document).ready(function(){
+			// 첨부파일 필수 view
+			$("#board_category").change(function(){
+				if($(this).val() == "2"){
+					$("#fileVital").show();
+				}else{
+					$("#fileVital").hide();
+				}
+			});	
+		});
+		
 	</script>	
 </head>
 <body>
@@ -28,62 +107,66 @@
 		<section id="container">
 			<div class="contents mem">
 				<div class="member_tit">
-					<h2>일정등록</h2>
+					<h2>커뮤니티 등록</h2>
 				</div>
 
 				<div class="table_member">
 					<p class="top_info"><span class="color_b">(필수)</span> 항목은 반드시 입력해야 합니다.</p>
-					<form name="insertForm" id="insertForm" method="post">
+					<form name="bbsInsertForm" id="bbsInsertForm" method="post" enctype="multipart/form-data">
 					<table>
-						<caption>일정등록 입력- 제목, 내용, 완료일자, 완료여부, 카테고리</caption>
+						<caption>커뮤니티 카테고리, 제목, 내용, 첨부파일등.</caption>
 						<colgroup>
 							<col style="width:23%;">
 							<col>
 						</colgroup>
 						<tbody>
 							<tr>
+								<th scope="row"><label for="title">카테고리 <span class="s_txt color_b">(필수)</span></label></th>
+								<td>
+									<div class="textbox_set">
+										<p>
+											<select style="width:100px;padding-right:10px;" name="board_category" id="board_category">
+												<option value="">선택</option>
+											<c:forEach items="${categoryList}"  var="category"  varStatus="status">
+												<option value="${category.board_type }">${category.board_name }</option>
+											</c:forEach>
+											</select>&nbsp;&nbsp;
+										</p>
+									</div>
+								</td>
+							</tr>
+							<tr>
 								<th scope="row"><label for="title">제목 <span class="s_txt color_b">(필수)</span></label></th>
 								<td>
 									<p>
-									<input type="text" id="title" name="title" class="text" style="width:271px;ime-mode:disabled;" maxlength="20" value="${todo.title}" />
+									<input type="text" id="title" name="title" class="text" style="width:500px;ime-mode:disabled;" maxlength="20"  />
 									</p>
-									<form:errors path="todo.title" cssClass="error" /> 
 								</td>
 							</tr>
 							<tr>
 								<th scope="row"><label for="content">내용 <span class="s_txt color_b">(필수)</span></label></th>
 								<td>
 									<p>
-									<input type="text" id="content" name="content" class="text" style="width:600px;ime-mode:disabled;" maxlength="100" value="${todo.content}" />
+									<textarea id="content" name="content" class="text" rows="10" cols="70"></textarea>
 									</p>
-									<form:errors path="todo.content" cssClass="error" /> 
 								</td>
 							</tr>
 							<tr>
-								<th scope="row"><label for="target_date">완료일자<span class="s_txt color_b">(필수)</span></label></th>
+								<th scope="row">
+									<label for="file">첨부파일<span id="fileVital" class="s_txt color_b">(필수)</span></label>
+								</th>
 								<td>
-									<p>
-									<input type="text" id="target_date" name="target_date" class="text" style="width:271px;" maxlength="100" value="<fmt:formatDate value="${todo.target_date}" pattern="yyyy-MM-dd"/>" /> 
+									<p id="file1">
+										<input type="file" id="file1" name="file1" class="text"  />
+										&nbsp;&nbsp;&nbsp;<span><a href="javascript:void(0);" onclick="fileAdd();">[추가]</a></span>							
+										&nbsp;&nbsp;&nbsp;<span><a href="javascript:void(0);" onclick="fileDel();">[삭제]</a></span>							
 									</p>
-									<form:errors path="todo.target_date" cssClass="error" />
-								</td>
-							</tr>
-							<tr>
-								<th scope="row"><label for="category">카테고리 <span class="s_txt color_b">(필수)</span></label></th>
-								<td>
-									<div class="textbox_set">
-										<p>
-											<select style="width:80px;padding-right:10px;" name="category" id="category">
-												<option value="">선택</option>
-											<c:forEach items="${categoryList}"  var="category"  varStatus="status">
-												<option value="${category.cate_id }">${category.cate_name }</option>
-											</c:forEach>
-											</select>&nbsp;&nbsp;
-										</p>
-									</div>
-									<form:errors path="todo.category" cssClass="error" element="div" >
-										<div id="category.errors" class="error">카테고리를 선택하세요.</div>
-									</form:errors>
+									<p id="file2">
+									<input type="file" id="file2" name="file2" class="text"  />
+									</p>
+									<p id="file3">
+									<input type="file" id="file3" name="file3" class="text"  />
+									</p>									
 								</td>
 							</tr>
 						</tbody>
@@ -92,7 +175,7 @@
 				</div>
 							
 				<div class="text_center">
-					<a href="javascript:void(0);" onclick="todoCheck();" class="btn btn_l">일정등록</a> 
+					<a href="javascript:void(0);" onclick="bbsCheck();" class="btn btn_l">등록</a> 
 					<a href="javascript:void(0);" onclick="page_link('/');" class="btn btn_l cancel">취소</a> 
 				</div>
 			</div>

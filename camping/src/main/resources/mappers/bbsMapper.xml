@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+<mapper namespace="com.camping.home.mapper.BbsMapper">
+
+	<select id="listCategory" resultType="com.camping.home.bbs.model.Bbs">
+ 	  <![CDATA[	
+		SELECT board_type, board_name from BOARD_CATEGORY
+ 	  ]]>		
+	</select>
+	
+	<insert id="insertBbs" parameterType="com.camping.home.bbs.model.Bbs" useGeneratedKeys="true" keyProperty="idx">
+		 <selectKey keyProperty="idx" resultType="int" order="BEFORE">
+		    select BOARD_SEQ.nextval FROM DUAL
+		 </selectKey>
+			Insert into board(idx, board_type, title, content, reg_id, reg_date, del_flag, ref, re_step, re_level)
+			values(#{idx}, #{board_type}, #{title}, #{content}, #{reg_id}, sysdate, 'N', #{ref}, #{re_step}, #{re_level})
+	</insert>
+	
+	<select id="getMaxRef" resultType="int">
+		<![CDATA[		
+			select NVL(max(ref),0) from board
+		]]>
+	</select>
+	
+	<select id="getAllBoard">
+		<![CDATA[		
+			Select * from (
+				Select a.*, ROWNUM AS rnum from (
+					Select * from BOARD order by ref DESC, re_level ASC
+					where del_flag='N' and board_type = #{board_type}
+					)a) 
+			where rnum between ${} and ${}			
+		]]>
+	</select>
+	
+	<select id="getAllFileList">
+		<![CDATA[		
+			select idx, board_idx, file_name, file_extention from FILEBOARD
+			where board_idx = #{board_idx}
+		]]>
+	</select>
+	
+	<select id="getOneBoard">
+		<![CDATA[		
+			select idx, board_type, title, content, reg_id, reg_date, modify_id, modify_date, readnum, del_flag, ref, re_step, re_level from BOARD
+			where board_idx = #{board_idx}
+		]]>		
+	</select>
+	
+	<update id="updateReadNum">
+		Update board set readnum = readnum + 1 where idx = #{idx} 
+	</update>
+	
+	<update id="updateBoard">
+		Update board 
+		set title = #{title}
+		, board_type = #{board_type}
+		, content = #{content}
+		, modify_id = #{modify_id}
+		, modify_date = sysdate
+		where idx = #{idx}
+	</update>
+	
+	
+	<update id="deleteboard">
+		Update board 
+		set del_flag = 'Y'
+		where idx = #{idx}
+	</update>
+	
+	<select id="getAllCount">
+		select count(idx) from BOARD
+		WHERE del_flag = 'N'
+	</select>
+	
+	
+	<insert id="insertBbsRe">
+		<selectKey keyProperty="idx" resultType="int" order="BEFORE">
+		    select BOARD_SEQ.nextval FROM DUAL
+		</selectKey>
+		Insert into board(idx, board_type, title, content, reg_id, reg_date, del_flag, ref, re_step, re_level)
+		values(#{idx}, #{board_type}, #{title}, #{content}, #{reg_id}, sysdate, 'N', #{ref}, #{re_step}, #{re_level})
+	</insert>
+	
+</mapper>
+
+			
+			
+			
+			
+			

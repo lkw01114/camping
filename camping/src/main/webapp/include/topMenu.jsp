@@ -29,7 +29,24 @@
 						</div>
 					</li>
 					<li>
-						<strong><a href="/bbs/bbs_write">커뮤니티</a></strong>
+						<strong><a href="javascript:void(0);">커뮤니티</a></strong>
+						<div class="sub" style="left:-250px;">
+							<div class="sub_cont">
+								<div class="sub_left">
+									<strong>커뮤니티<br/>소개</strong>
+									<span>캠핑장 관련 공지,예약관련 문의입니다.</span>
+									<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+								</div>
+								<div class="sub_list">
+									<strong>커뮤니티</strong>
+									<ul>
+										<li><a href="/bbs/bbs_write">공지사항</a></li>
+										<li><a href="#">예약문의</a></li>
+										<li><a href="#">포토갤러리</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</div>
