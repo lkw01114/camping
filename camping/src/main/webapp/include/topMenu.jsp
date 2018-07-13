@@ -41,8 +41,8 @@
 									<strong>커뮤니티</strong>
 									<ul>
 										<li><a href="/bbs/bbs_write">공지사항</a></li>
-										<li><a href="#">예약문의</a></li>
-										<li><a href="#">포토갤러리</a></li>
+										<li><a href="/bbs/bbs_list?menuseq=1">예약문의</a></li>
+										<li><a href="/bbs/bbs_list?menuseq=2">포토갤러리</a></li>
 									</ul>
 								</div>
 							</div>

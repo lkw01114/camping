@@ -44,12 +44,13 @@
 		}
 	 } 
 	
-	function OnPage(str1, str2, str3) {  
+	function OnPage(str1, str2, str3, str4) {  
 		var act = str1;
 		var page = str2;
 		var pageSize = str3;
+		var menuseq = str4;
 		 if(act != '') {
-			document.location.href = act+"?page="+page +"&pageSize="+pageSize;
+			document.location.href = act+"?page="+page +"&pageSize="+pageSize+"&menuseq="+menuseq;
 	   }
 	}
 	

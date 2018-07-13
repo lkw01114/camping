@@ -16,4 +16,12 @@ public interface BbsService {
 	public int getMaxRef() throws Exception;
 	
 	public int insertBbs(Map params) throws Exception;
+	
+	public int insertFile(Map params) throws Exception;
+	
+	public List<Bbs> selectBbsList(Map params) throws Exception;
+	
+	public int selectBbsCount(Map params) throws Exception;
+	
+	
 }

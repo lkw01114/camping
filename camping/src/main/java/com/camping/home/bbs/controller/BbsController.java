@@ -1,9 +1,7 @@
 package com.camping.home.bbs.controller;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,16 +13,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.camping.home.bbs.service.BbsService;
+import com.camping.home.common.CommonFile;
 import com.camping.home.common.CommonUtil;
 import com.camping.home.member.model.Member;
-import com.camping.home.common.CommonFile;
 
 @Controller
 @RequestMapping("/bbs/*")
@@ -95,54 +92,77 @@ public class BbsController {
 		// 파일 물리적 저장.
 		List<Map<String,Object>> fileList = CommonFile.getFile(files,imageYN, String.valueOf(board_type));		
 
-		String thum = "";
-		if(fileList != null && fileList.size() > 0)  
-		{
-			
+		// 파일 DB 저장
+		if(fileList != null && fileList.size() > 0){
 			
 			strFileName = CommonUtil.nvl(fileList.get(0).get("fileAllList"));
 			logger.info("strFileName >> " + strFileName);
-			
-			if("Y".equals(CommonUtil.nvl(fileList.get(0).get("thum"))))
-			{
-				thum = CommonUtil.nvl(fileList.get(0).get("fileName")) + "||" + CommonUtil.nvl(params.get("thum_alt"));
-			}
+			String[] spStrNames = strFileName.split("\\|\\|");
+			for(String fileName : spStrNames) {
+				params.put("board_idx", insertIdx);
+				params.put("file_name", fileName);
+				bbsService.insertFile(params);
+			}			
 		}
 		
-		/*
-		if (file != null) {
-			logger.info("file upload: " + file.getOriginalFilename());
-			
-			String saveFileName = null;
-			try {
-				saveFileName = uploadFile(file.getOriginalFilename(), file.getBytes());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			model.addAttribute("saveFileName", saveFileName);
-			model.addAttribute("orgFileName", file.getOriginalFilename());		
-		}
-		*/		
-		
-		return "redirect:/bbs/bbs_list.do?menuseq="+board_type;
-		
+		return "redirect:/bbs/bbs_list?menuseq="+board_type;
 	}
 	
 	
-	private String uploadFile(String orgFileName, byte[] fileData) throws Exception {
-		UUID uid = UUID.randomUUID();
-		String savedName = uid.toString() + "_" + orgFileName;
-		
-		String absoluteFilePath = context.getRealPath(uploadPath);
-		File target = new File(absoluteFilePath, savedName);
-		FileCopyUtils.copy(fileData, target);
-		
-		return savedName;
-	}
 	
+	/**
+	 * 게시판 리스트
+	 * @param params
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "bbs_list")
 	public String bbs_list(@RequestParam Map<String,Object> params, Model model, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$");
+		
+		String menuSeq = CommonUtil.nvl(params.get("menuseq"),"0");
+
+		String page = CommonUtil.nvlTrim(request.getParameter("page")).equals("") ? "1" : request.getParameter("page");
+		String pageSize = CommonUtil.nvlTrim(request.getParameter("pageSize")).equals("") ? "10" : request.getParameter("pageSize");
+
+		int resultPageSize = Integer.parseInt(pageSize) == 0 ? BbsService.pager : Integer.parseInt(pageSize);
+		int startCount = (Integer.parseInt(page) - 1) * resultPageSize + 1; // startCount
+		int endCount = Integer.parseInt(page) * resultPageSize; // endCount
+		params.put("board_type", menuSeq);
+		params.put("startCount", startCount);
+		params.put("endCount", endCount);
+		
+		try {
+			model.addAttribute("bbsList", bbsService.selectBbsList(params));
+			int totalCount = bbsService.selectBbsCount(params); // totalCount
+			int countnum = totalCount - (Integer.parseInt(pageSize) * (Integer.parseInt(page) - 1)); // countnum
+			int totalPage = totalCount;
+			double tempCount = 0;
+			double tempTotalPage = 0;
+			tempCount = totalCount;
+			if (resultPageSize != 0) {
+				tempTotalPage = (double) tempCount / Integer.parseInt(pageSize);
+			} else {
+				tempTotalPage = (double) tempCount / BbsService.pager;
+			}
+
+			totalPage = (int) Math.ceil(tempTotalPage);
+
+			logger.info("*******************************************");
+			model.addAttribute("countnum", countnum);
+			model.addAttribute("totalPage", totalPage);
+			model.addAttribute("page", page);
+			model.addAttribute("pagename", "/bbs/bbs_list");
+			model.addAttribute("pageSize", resultPageSize);
+			model.addAttribute("menuseq", menuSeq);
+			return URL_OF_COMMON + "bbs_list";		
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return "";
 	}

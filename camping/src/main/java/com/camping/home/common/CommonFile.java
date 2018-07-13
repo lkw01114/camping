@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
@@ -57,6 +58,9 @@ public class CommonFile {
 		    file = entry.getValue();
 		    String orginFileName = file.getOriginalFilename();
 		    
+			UUID uid = UUID.randomUUID();
+			String savedName = uid.toString() + "_" + orginFileName;
+		    
 		    if ("".equals(orginFileName)) {
 		    	continue;
 		    }
@@ -85,15 +89,15 @@ public class CommonFile {
 			    
 			    if(!f2.isDirectory()) f2.mkdirs();
 			    
-			    orginFileName = newFolderName + orginFileName;
+			    savedName = newFolderName + savedName;
 		    }
 		    
-		    String fileFullPath = path + orginFileName;
+		    String fileFullPath = path + savedName;
 		    System.out.println("fileFullPath >> " + fileFullPath);
-		    String fileExt = orginFileName.substring(orginFileName.lastIndexOf(".") + 1);
+		    String fileExt = savedName.substring(savedName.lastIndexOf(".") + 1);
 		    file.transferTo(new File(fileFullPath));
 		    fileMap.put("fileSize", Long.toString(file.getSize()));
-		    fileMap.put("fileName", orginFileName);
+		    fileMap.put("fileName", savedName);
 		    fileMap.put("fileFullPath", fileFullPath);
 		    fileMap.put("fileExt", fileExt);
 		    

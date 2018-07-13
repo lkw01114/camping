@@ -34,4 +34,19 @@ public class BbsServiceImpl implements BbsService {
 		return session.selectOne(name +  ".getMaxRef");
 	}
 
+	@Override
+	public int insertFile(Map params) throws Exception {
+		return session.insert(name + ".inertFile", params);
+	}
+
+	@Override
+	public List<Bbs> selectBbsList(Map params) throws Exception {
+		return session.selectList(name + ".selectBbsList", params);
+	}
+
+	@Override
+	public int selectBbsCount(Map params) throws Exception {
+		return session.selectOne(name + ".selectBbsCount", params);
+	}
+
 }

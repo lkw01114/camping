@@ -20,6 +20,14 @@
 		values(#{idx}, #{board_type}, #{title}, #{content}, #{reg_id}, sysdate, 'N', #{ref}, #{re_step}, #{re_level})
 	</insert>
 	
+	<insert id="inertFile">
+		<selectKey keyProperty="idx" resultType="Integer" order="BEFORE">
+		   SELECT FILEBOARD_SEQ.nextval from dual
+		</selectKey>		
+		Insert into FileBoard(idx, board_idx, file_name)
+		values(#{idx}, #{board_idx}, #{file_name})
+	</insert>
+	
 	
 	<select id="getMaxRef" resultType="int">
 		<![CDATA[		
@@ -27,16 +35,29 @@
 		]]>
 	</select>
 	
-	<select id="getAllBoard">
+	<select id="selectBbsList" resultType="com.camping.home.bbs.model.Bbs">
 		<![CDATA[		
 			Select * from (
-				Select a.*, ROWNUM AS rnum from (
-					Select * from BOARD order by ref DESC, re_level ASC
-					where del_flag='N' and board_type = #{board_type}
-					)a) 
-			where rnum between ${} and ${}			
+				Select 
+					a.idx, a.board_type, a.title, a.content, a.reg_id, 
+					TO_DATE(TO_CHAR(a.reg_date,'YYYY-MM-DD'),'yyyy-MM-dd') AS reg_date,
+					a.readnum, ROWNUM AS rnum from (
+					Select * from BOARD 
+						where del_flag='N' and board_type = #{board_type}
+						order by ref DESC, re_level ASC
+				)a
+			) where rnum between ${startCount} and ${endCount}			
 		]]>
 	</select>
+	
+	<select id="listTodoTotalCount" resultType="int">
+ 	  <![CDATA[	
+		SELECT 
+			Count(*) 
+		FROM BOARD
+		WHERE del_flag='N' and board_type = #{board_type} 
+ 	  ]]>	 
+	</select>	
 	
 	<select id="getAllFileList">
 		<![CDATA[		
@@ -73,9 +94,9 @@
 		where idx = #{idx}
 	</update>
 	
-	<select id="getAllCount">
+	<select id="selectBbsCount" resultType="int">
 		select count(idx) from BOARD
-		WHERE del_flag = 'N'
+		WHERE del_flag = 'N' and board_type = #{board_type}
 	</select>
 	
 	
