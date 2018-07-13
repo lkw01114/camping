@@ -79,21 +79,29 @@ public class BbsController {
 		params.put("re_step", 1);
 		params.put("re_level", 1);
 		
-		//TODO 새글 등록 글번호 가져오는 부분.
+		// 등록 성공여부
 		int insertResult = bbsService.insertBbs(params);
+		
 		logger.info("insertResult >> " + insertResult);
+		logger.info("idx >  " + params.get("idx"));
+		
+		// 등록된 게시판 번호
+		String insertIdx = CommonUtil.nvlTrim(params.get("idx"));
 		
 		final Map<String, MultipartFile> files = multiRequest.getFileMap();
 		
-		
 		String imageYN = CommonUtil.nvl(params.get("board_type")).equals("2") == true ? "Y" : "N";
+		
 		// 파일 물리적 저장.
 		List<Map<String,Object>> fileList = CommonFile.getFile(files,imageYN, String.valueOf(board_type));		
 
 		String thum = "";
-		if(fileList != null && fileList.size() > 0)
+		if(fileList != null && fileList.size() > 0)  
 		{
+			
+			
 			strFileName = CommonUtil.nvl(fileList.get(0).get("fileAllList"));
+			logger.info("strFileName >> " + strFileName);
 			
 			if("Y".equals(CommonUtil.nvl(fileList.get(0).get("thum"))))
 			{

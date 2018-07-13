@@ -24,7 +24,9 @@ public class BbsServiceImpl implements BbsService {
 
 	@Override
 	public int insertBbs(Map params) throws Exception {
-		return session.insert(name +  ".insertBbs", params);
+		//Bbs bbs = new Bbs();
+		//bbs = 
+		return session.insert(name +  ".insertBbs", params);  
 	}
 
 	@Override

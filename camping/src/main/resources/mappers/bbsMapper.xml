@@ -12,13 +12,14 @@
  	  ]]>		
 	</select>
 	
-	<insert id="insertBbs" parameterType="com.camping.home.bbs.model.Bbs" useGeneratedKeys="true" keyProperty="idx">
-		 <selectKey keyProperty="idx" resultType="int" order="BEFORE">
-		    select BOARD_SEQ.nextval FROM DUAL
-		 </selectKey>
-			Insert into board(idx, board_type, title, content, reg_id, reg_date, del_flag, ref, re_step, re_level)
-			values(#{idx}, #{board_type}, #{title}, #{content}, #{reg_id}, sysdate, 'N', #{ref}, #{re_step}, #{re_level})
+	<insert id="insertBbs" parameterType="com.camping.home.bbs.model.Bbs" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
+		<selectKey keyProperty="idx" resultType="Integer" order="BEFORE">
+		   SELECT BOARD_SEQ.nextval FROM DUAL
+		</selectKey>	
+		Insert into board(idx, board_type, title, content, reg_id, reg_date, del_flag, ref, re_step, re_level)
+		values(#{idx}, #{board_type}, #{title}, #{content}, #{reg_id}, sysdate, 'N', #{ref}, #{re_step}, #{re_level})
 	</insert>
+	
 	
 	<select id="getMaxRef" resultType="int">
 		<![CDATA[		

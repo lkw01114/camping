@@ -26,8 +26,9 @@ public class CommonFile {
 	@Autowired
 	static
 	ServletContext context;
+	
 	/**
-	 * 파일 저장
+	 * 파일저장.
 	 * 
 	 * @param files
 	 * @return
@@ -60,11 +61,11 @@ public class CommonFile {
 		    	continue;
 		    }
 		    String path = "";
-		    String addFolder = "";	//seq 에 따라서 폴더별 생성.
+		    String addFolder = "";	//seq에 따라서 폴더생성 변수
 		    
 		    
 		    //path = PropertyUtil.getProperty("rootPath")+PropertyUtil.getProperty("Global.filePath2");
-		    path = PropertyUtil.getProperty("Global.filePath2");
+		    path = PropertyUtil.getProperty("Global.rootPath")+PropertyUtil.getProperty("Global.filePath2");
 		    path = path.replace("//", "/");
 		    path = path.replace("\\", "/");
 		    System.out.println("path >>>> " + path);
@@ -121,7 +122,7 @@ public class CommonFile {
 		
 		if(defaultResult != null && defaultResult.size() > 0)
 		{
-			//������
+			//占쏙옙占쏙옙占쏙옙
 			Collections.reverse(defaultResult);
 			for(int i=0; i<defaultResult.size(); i++)
 			{
@@ -130,7 +131,7 @@ public class CommonFile {
 			}
 		}
 		
-		//���ϸ� ���
+		//占쏙옙占싹몌옙 占쏙옙占�
 		if(result != null && result.size() > 0)
 		{
 			ArrayList<String> tmpStrings = new ArrayList<String>();
@@ -148,7 +149,7 @@ public class CommonFile {
 	}
 	
 	/**
-	 * txt form�� ������ Map<String,Strnig[]>���� ��ȯ�մϴ�.
+	 * txt form占쏙옙 占쏙옙占쏙옙占쏙옙 Map<String,Strnig[]>占쏙옙占쏙옙 占쏙옙환占쌌니댐옙.
 	 * @param files
 	 * @return
 	 * @throws IOException
@@ -170,7 +171,7 @@ public class CommonFile {
 		    
 		    String orginFileName = file.getOriginalFilename();
 		    
-		    //form �̸��� txt�� ���۵Ǵ°͸� �ش� �޼ҵ忡�� ó�� ���� -> Exception ����
+		    //form 占싱몌옙占쏙옙 txt占쏙옙 占쏙옙占쌜되는것몌옙 占쌔댐옙 占쌨소드에占쏙옙 처占쏙옙 占쏙옙占쏙옙 -> Exception 占쏙옙占쏙옙
 		    if(formName.indexOf("txt") == -1 || "".equals(orginFileName)) continue;
 		    
 		    String[] resultArr = pathToArray(file.getInputStream());
@@ -182,7 +183,7 @@ public class CommonFile {
 	}
 	
 	/**
-	 * txt ������ Array�� ����
+	 * txt 占쏙옙占쏙옙占쏙옙 Array占쏙옙 占쏙옙占쏙옙
 	 * @param path
 	 * @return
 	 * @throws IOException

@@ -21,7 +21,7 @@
 	</logger>
 	
 	<logger name="org.springframework.jdbc">
-		<level value="warn" />
+		<level value="info" />
 	</logger>
 	
 	<logger name="org.springframework.security">
@@ -42,7 +42,7 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="info" />
+		<priority value="debug" />
 		<appender-ref ref="console" />
 	</root>    
 
