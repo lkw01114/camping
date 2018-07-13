@@ -58,7 +58,7 @@
 							<c:forEach items='${bbsList }' var='list' varStatus="status">
 							<tr>
 								<td>${countnum-status.index }</td>
-								<td class="txt_l"><a href="/todo/detailTodo?idx=${list.idx}&page=${page}&pageSize=${pageSize}">${list.title }</a></td>  
+								<td class="txt_l"><a href="/bbs/detailBbs?idx=${list.idx}&page=${page}&pageSize=${pageSize}">${list.title }</a></td>  
 								<td class="txt_l">${list.reg_id}</td>  
 								<td><fmt:formatDate value="${list.reg_date}" pattern="yyyy-MM-dd"/></td>
 								<td><fmt:formatNumber  value="${list.readnum}" pattern="#,###"/></td>

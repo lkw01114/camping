@@ -23,5 +23,7 @@ public interface BbsService {
 	
 	public int selectBbsCount(Map params) throws Exception;
 	
+	public Bbs detailBbs(Map params) throws Exception;
+	
 	
 }

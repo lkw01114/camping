@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.camping.home.bbs.model.Bbs;
 import com.camping.home.bbs.service.BbsService;
 import com.camping.home.common.CommonFile;
 import com.camping.home.common.CommonUtil;
@@ -120,7 +121,6 @@ public class BbsController {
 	 */
 	@RequestMapping(value = "bbs_list")
 	public String bbs_list(@RequestParam Map<String,Object> params, Model model, HttpServletRequest request, HttpServletResponse response) {
-		logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$");
 		
 		String menuSeq = CommonUtil.nvl(params.get("menuseq"),"0");
 
@@ -150,7 +150,6 @@ public class BbsController {
 
 			totalPage = (int) Math.ceil(tempTotalPage);
 
-			logger.info("*******************************************");
 			model.addAttribute("countnum", countnum);
 			model.addAttribute("totalPage", totalPage);
 			model.addAttribute("page", page);
@@ -166,6 +165,32 @@ public class BbsController {
 		
 		return "";
 	}
+	
+	/**
+	 * 게시물 상세보기
+	 * @param model
+	 * @param params
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "detailBbs")
+	public String detailBbs(Model model, @RequestParam Map<String, Object> params, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		String page = CommonUtil.nvlTrim(request.getParameter("page")).equals("") ? "1" : request.getParameter("page");
+		
+		Bbs bbs = bbsService.detailBbs(params);
+		model.addAttribute("todo", bbs);
+		model.addAttribute("page", page);
+		model.addAttribute("menuseq", CommonUtil.nvlTrim(params.get("menuseq")));
+		model.addAttribute("pageSize", CommonUtil.nvlTrim(request.getParameter("pageSize")));
+		
+		return  URL_OF_COMMON + "bbs_detail";
+	}
+	
+	
 	
 	
 }

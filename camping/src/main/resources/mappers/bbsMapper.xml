@@ -63,15 +63,28 @@
 		<![CDATA[		
 			select idx, board_idx, file_name, file_extention from FILEBOARD
 			where board_idx = #{board_idx}
+			
+			
+			
+			
 		]]>
 	</select>
 	
-	<select id="getOneBoard">
+	<select id="detailBbs" resultType="com.camping.home.bbs.model.Bbs">
 		<![CDATA[		
 			select idx, board_type, title, content, reg_id, reg_date, modify_id, modify_date, readnum, del_flag, ref, re_step, re_level from BOARD
 			where board_idx = #{board_idx}
 		]]>		
 	</select>
+	
+	<select id="selectPreBbs">
+		Select idx, board_type, title, reg_id, reg_date from BBS
+		where board_type = #{board_type}
+		
+	
+	</select>
+	
+	
 	
 	<update id="updateReadNum">
 		Update board set readnum = readnum + 1 where idx = #{idx} 

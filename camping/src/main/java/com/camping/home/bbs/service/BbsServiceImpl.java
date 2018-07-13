@@ -49,4 +49,9 @@ public class BbsServiceImpl implements BbsService {
 		return session.selectOne(name + ".selectBbsCount", params);
 	}
 
+	@Override
+	public Bbs detailBbs(Map params) throws Exception {
+		return session.selectOne(name + ".detailBbs", params);
+	}
+
 }
