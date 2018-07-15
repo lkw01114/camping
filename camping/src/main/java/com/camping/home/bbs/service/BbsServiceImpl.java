@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.camping.home.bbs.model.Bbs;
+import com.camping.home.bbs.model.FileVO;
 
 @Service
 public class BbsServiceImpl implements BbsService {
@@ -24,8 +25,6 @@ public class BbsServiceImpl implements BbsService {
 
 	@Override
 	public int insertBbs(Map params) throws Exception {
-		//Bbs bbs = new Bbs();
-		//bbs = 
 		return session.insert(name +  ".insertBbs", params);  
 	}
 
@@ -52,6 +51,32 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Bbs detailBbs(Map params) throws Exception {
 		return session.selectOne(name + ".detailBbs", params);
+	}
+	
+	@Override
+	public List<FileVO> selectFileList(Map params) throws Exception {
+		return session.selectList(name + ".selectFileList", params);
+	}
+
+	@Override
+	public void updateReadNum(Map params) throws Exception {
+		session.update(name + ".updateReadNum", params);
+	}
+
+	@Override
+	public void deleteboard(Map params) throws Exception {
+		session.delete(name + ".deleteboard", params);
+		
+	}
+
+	@Override
+	public void deletefileBoard(Map params) throws Exception {
+		session.delete(name + ".deletefileBoard", params);
+	}
+
+	@Override
+	public void delflag_update(Map params) throws Exception {
+		session.delete(name + ".delflag_update", params);
 	}
 
 }

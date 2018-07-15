@@ -6,12 +6,14 @@
   
 <mapper namespace="com.camping.home.mapper.BbsMapper">
 
+	<!-- 커뮤니티 리스트 -->
 	<select id="listCategory" resultType="com.camping.home.bbs.model.Bbs">
  	  <![CDATA[	
 		SELECT board_type, board_name from BOARD_CATEGORY
  	  ]]>		
 	</select>
 	
+	<!-- 커뮤니티 등록 -->
 	<insert id="insertBbs" parameterType="com.camping.home.bbs.model.Bbs" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
 		<selectKey keyProperty="idx" resultType="Integer" order="BEFORE">
 		   SELECT BOARD_SEQ.nextval FROM DUAL
@@ -20,6 +22,7 @@
 		values(#{idx}, #{board_type}, #{title}, #{content}, #{reg_id}, sysdate, 'N', #{ref}, #{re_step}, #{re_level})
 	</insert>
 	
+	<!-- 파일등록 -->
 	<insert id="inertFile">
 		<selectKey keyProperty="idx" resultType="Integer" order="BEFORE">
 		   SELECT FILEBOARD_SEQ.nextval from dual
@@ -28,68 +31,64 @@
 		values(#{idx}, #{board_idx}, #{file_name})
 	</insert>
 	
-	
+	<!-- 최고 글그룹 가져오기 -->
 	<select id="getMaxRef" resultType="int">
 		<![CDATA[		
 			select NVL(max(ref),0) from board
 		]]>
 	</select>
 	
+	<!-- 리스트 가져오기 -->
 	<select id="selectBbsList" resultType="com.camping.home.bbs.model.Bbs">
 		<![CDATA[		
 			Select * from (
 				Select 
 					a.idx, a.board_type, a.title, a.content, a.reg_id, 
 					TO_DATE(TO_CHAR(a.reg_date,'YYYY-MM-DD'),'yyyy-MM-dd') AS reg_date,
-					a.readnum, ROWNUM AS rnum from (
+					a.del_flag, a.readnum, ROWNUM AS rnum from (
 					Select * from BOARD 
-						where del_flag='N' and board_type = #{board_type}
+						where board_type = #{board_type}
 						order by ref DESC, re_level ASC
 				)a
 			) where rnum between ${startCount} and ${endCount}			
 		]]>
 	</select>
 	
-	<select id="listTodoTotalCount" resultType="int">
- 	  <![CDATA[	
-		SELECT 
-			Count(*) 
-		FROM BOARD
-		WHERE del_flag='N' and board_type = #{board_type} 
- 	  ]]>	 
-	</select>	
-	
-	<select id="getAllFileList">
+	<!-- 해당 파일 리스트 -->
+	<select id="selectFileList" resultType="com.camping.home.bbs.model.FileVO">
 		<![CDATA[		
-			select idx, board_idx, file_name, file_extention from FILEBOARD
+			select idx, board_idx, file_name from FILEBOARD
 			where board_idx = #{board_idx}
-			
-			
-			
-			
 		]]>
 	</select>
 	
+	<!-- 게시물 상세정보 -->
 	<select id="detailBbs" resultType="com.camping.home.bbs.model.Bbs">
 		<![CDATA[		
-			select idx, board_type, title, content, reg_id, reg_date, modify_id, modify_date, readnum, del_flag, ref, re_step, re_level from BOARD
-			where board_idx = #{board_idx}
+			select 
+				idx, board_type, title, content, reg_id, 
+				TO_DATE(TO_CHAR(reg_date,'YYYY-MM-DD'),'yyyy-MM-dd') AS reg_date,
+				modify_id, 
+				TO_DATE(TO_CHAR(modify_date,'YYYY-MM-DD'),'yyyy-MM-dd') AS modify_date,
+				readnum, del_flag, ref, re_step, re_level 
+			from BOARD
+			where idx = #{idx}
 		]]>		
 	</select>
 	
+	<!-- 임시 테스트 -->
 	<select id="selectPreBbs">
 		Select idx, board_type, title, reg_id, reg_date from BBS
 		where board_type = #{board_type}
-		
-	
 	</select>
 	
 	
-	
+	<!-- 게시물 조회수 증가 -->
 	<update id="updateReadNum">
 		Update board set readnum = readnum + 1 where idx = #{idx} 
 	</update>
 	
+	<!-- 게시물 수정. -->
 	<update id="updateBoard">
 		Update board 
 		set title = #{title}
@@ -100,26 +99,40 @@
 		where idx = #{idx}
 	</update>
 	
-	
-	<update id="deleteboard">
-		Update board 
+	<!-- 삭제처리 -->
+	<update id="delflag_update">
+		Update BOARD 
 		set del_flag = 'Y'
 		where idx = #{idx}
 	</update>
 	
+	<!-- 해당 게시물 바로 삭제처리 -->
+	<delete id="deleteboard">
+		Delete from BOARD
+		WHERE idx = #{idx}
+	</delete>
+	
+	<!-- 해당 게시물 번호 파일 삭제처리 -->
+	<delete id="deletefileBoard">
+		Delete from FILEBOARD
+		WHERE board_idx = #{board_idx}
+	</delete>
+	
+	<!-- 각 게시물 총 카운트 -->
 	<select id="selectBbsCount" resultType="int">
 		select count(idx) from BOARD
-		WHERE del_flag = 'N' and board_type = #{board_type}
+		WHERE board_type = #{board_type}
 	</select>
 	
-	
-	<insert id="insertBbsRe">
-		<selectKey keyProperty="idx" resultType="int" order="BEFORE">
+	<!-- 답변글 등록. -->
+	<insert id="insertBbsRe" parameterType="com.camping.home.bbs.model.Bbs" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
+		<selectKey keyProperty="idx" resultType="Integer" order="BEFORE">
 		    select BOARD_SEQ.nextval FROM DUAL
 		</selectKey>
 		Insert into board(idx, board_type, title, content, reg_id, reg_date, del_flag, ref, re_step, re_level)
 		values(#{idx}, #{board_type}, #{title}, #{content}, #{reg_id}, sysdate, 'N', #{ref}, #{re_step}, #{re_level})
 	</insert>
+	
 	
 </mapper>
 

@@ -42,12 +42,17 @@
 					return false;	
 				}
 			}
-			$("#bbsInsertForm").attr("action","/bbs/bbs_writeAction").submit();
+			
+			if($("#ref").val() == ""){
+				$("#bbsInsertForm").attr("action","/bbs/bbs_writeAction").submit();
+			}else{
+				$("#bbsInsertForm").attr("action","/bbs/bbs_RewriteAction").submit();				
+			}
 		}
 		
 		$(document).ready(function(){
-			$("#file2").hide();
-			$("#file3").hide();
+			$(".file2").hide();
+			$(".file3").hide();
 			$("#fileVital").hide();
 		});
 
@@ -95,7 +100,11 @@
 				}else{
 					$("#fileVital").hide();
 				}
-			});	
+			});
+			
+			// category selectbox selected
+			var category = "${menuSeq}";
+			$("#board_category").val(category).prop("selected", true); 
 		});
 		
 	</script>	
@@ -113,6 +122,9 @@
 				<div class="table_member">
 					<p class="top_info"><span class="color_b">(필수)</span> 항목은 반드시 입력해야 합니다.</p>
 					<form name="bbsInsertForm" id="bbsInsertForm" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="ref" 		id="page" 		value="${ref }" />
+					<input type="hidden" name="re_step" 	id="re_step" 	value="${re_step }" />
+					<input type="hidden" name="re_level" 	id="re_level" 	value="${re_level }" />
 					<table>
 						<caption>커뮤니티 카테고리, 제목, 내용, 첨부파일등.</caption>
 						<colgroup>
@@ -125,7 +137,7 @@
 								<td>
 									<div class="textbox_set">
 										<p>
-											<select style="width:100px;padding-right:10px;" name="board_category" id="board_category">
+											<select style="width:120px;padding-right:10px;" name="board_category" id="board_category">
 												<option value="">선택</option>
 											<c:forEach items="${categoryList}"  var="category"  varStatus="status">
 												<option value="${category.board_type }">${category.board_name }</option>
@@ -156,15 +168,15 @@
 									<label for="file">첨부파일<span id="fileVital" class="s_txt color_b">(필수)</span></label>
 								</th>
 								<td>
-									<p id="file1">
+									<p class="file1">
 										<input type="file" id="file1" name="file1" class="text"  />
 										&nbsp;&nbsp;&nbsp;<span><a href="javascript:void(0);" onclick="fileAdd();">[추가]</a></span>							
 										&nbsp;&nbsp;&nbsp;<span><a href="javascript:void(0);" onclick="fileDel();">[삭제]</a></span>							
 									</p>
-									<p id="file2">
+									<p class="file2">
 									<input type="file" id="file2" name="file2" class="text"  />
 									</p>
-									<p id="file3">
+									<p class="file3">
 									<input type="file" id="file3" name="file3" class="text"  />
 									</p>									
 								</td>
@@ -175,8 +187,8 @@
 				</div>
 							
 				<div class="text_center">
-					<a href="javascript:void(0);" onclick="bbsCheck();" class="btn btn_l">등록</a> 
-					<a href="javascript:void(0);" onclick="page_link('/');" class="btn btn_l cancel">취소</a> 
+					<a href="javascript:void(0);" onclick="bbsCheck();" class="btn btn_xs">등록</a> 
+					<a href="javascript:void(0);" onclick="page_link('/');" class="btn btn_xs cancel">취소</a> 
 				</div>
 			</div>
 		</section>

@@ -1,6 +1,9 @@
 eclipse.preferences.version=1
+encoding//src/main/java/com/camping/home/bbs/controller/BbsController.java=UTF-8
 encoding//src/main/java/com/camping/home/common/CommonFile.java=UTF-8
 encoding//src/main/java/com/camping/home/common/StrUtil.java=UTF-8
 encoding//src/main/resources/global.properties=UTF-8
 encoding//src/main/resources/message.properties=UTF-8
+encoding//src/main/webapp/WEB-INF/jsp/bbs/bbs_list.jsp=UTF-8
+encoding//src/main/webapp/_document.txt=UTF-8
 encoding//src/main/webapp/resources/static/js/awdDisplay.js=euc-kr

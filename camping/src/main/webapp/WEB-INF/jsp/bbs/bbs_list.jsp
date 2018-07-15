@@ -29,6 +29,8 @@
 					<c:otherwise>???</c:otherwise>
 				</c:choose>
 				</h3>
+				<p></p>
+				<p></p>
 				<!-- news_board -->
 				<div class="news_board">
 					<table>
@@ -58,7 +60,17 @@
 							<c:forEach items='${bbsList }' var='list' varStatus="status">
 							<tr>
 								<td>${countnum-status.index }</td>
-								<td class="txt_l"><a href="/bbs/detailBbs?idx=${list.idx}&page=${page}&pageSize=${pageSize}">${list.title }</a></td>  
+								<td class="txt_l">
+									<c:choose>
+										<c:when test="${list.del_flag eq 'Y' }">
+											삭제된 게시물 입니다.
+										</c:when>
+										<c:otherwise>
+											<a href="/bbs/bbs_detail?idx=${list.idx}&page=${page}&pageSize=${pageSize}&menuseq=${menuseq}">${list.title }</a>	
+										</c:otherwise>
+									</c:choose>
+									
+								</td>  
 								<td class="txt_l">${list.reg_id}</td>  
 								<td><fmt:formatDate value="${list.reg_date}" pattern="yyyy-MM-dd"/></td>
 								<td><fmt:formatNumber  value="${list.readnum}" pattern="#,###"/></td>
@@ -78,6 +90,15 @@
 				<jsp:param name="menuseq" value="${menuseq}"/>
 				</jsp:include>						
 				<!-- // page_area -->
+				
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<div class="txt_r"><!-- btn_list  -->
+					<a href="/bbs/bbs_write?menuseq=${menuseq}" class="btn btn_xs">글쓰기</a>
+				</div>
 
 			</div>
 		</section>
